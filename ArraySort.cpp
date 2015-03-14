@@ -2,7 +2,7 @@
 
 using namespace std;
 
-double *Value(double *a)
+double *Value(double a[])
 {
     double *b = new double[100];
     for(int i=0; i<100; ++i)
@@ -18,7 +18,7 @@ void Swap(double *a, double *b)
     *b = tmp;
 }
 
-double *QuickSort(double *arr,int low,int high)
+double *QuickSort(double arr[],int low,int high)
 {
     if(low > high) return arr;
     int k = low;
@@ -27,7 +27,7 @@ double *QuickSort(double *arr,int low,int high)
     {
         if(k>i)
         {
-            if(arr[k]>arr[i]){Swap(&arr[k], &arr[i]); k=i;}
+            if(arr[k]>=arr[i]){Swap(&arr[k], &arr[i]); k=i;}
             i++;
         }
         if(k<j)
@@ -36,6 +36,7 @@ double *QuickSort(double *arr,int low,int high)
             j--;
         }
     }
+
     QuickSort(arr , low , k-1);
     QuickSort(arr , k+1 , high);
 }
@@ -51,39 +52,41 @@ double *BubbleSort(double arr[], int count)
     return arr;
 }
 
-double *MergeSort(double arr[],int low, int high)
+double *Merge(double arr[], int low, int mid, int high)
 {
-    int mid = 0;
-
-    if(low == high) return NULL;
-    else
-    {
-        mid = (low + high)/2;
-        MergeSort(arr, low, mid);
-        MergeSort(arr, mid+1, high);
-    }
-
-    double *tmp = new double[high-low];
-    for(int i = 0 ; i<(high-low) ; i++)
+    double *tmp = new double[high-mid];
+    for(int i = 0 ; i<(high-mid) ; i++)
     {
         tmp[i] = arr[mid+i+1];
     }
 
-    int m = mid, n = high-mid;
-    for(int i = high; i <= low; --i)
+    int m = mid, n = high-mid-1;
+    for(int i = high; i >= low; --i)
     {
-        while(m>low&&n>0)
-        {
-            if(arr[m]<tmp[n-1]) {arr[i]=arr[m];m--;}
-            else {arr[i]=tmp[n-1];n--;}
-        }
+        if(m>=low&&n>=0&&arr[m]<=tmp[n]) {arr[i]=arr[m];m--;}
+        else if(m>=low&&n>=0&&arr[m]>tmp[n]) {arr[i]=tmp[n];n--;}
+        else if(m>=low&&n<0) {arr[i]=arr[m];m--;}
+        else if(m<low&&n>=0) {arr[i]=tmp[n];n--;}
     }
+
     return arr;
+}
+
+double *MergeSort(double arr[],int low, int high)
+{
+    if(low >= high) return NULL;
+    else
+    {
+        int mid = (low + high)/2;
+        MergeSort(arr, low, mid);
+        MergeSort(arr, mid+1, high);
+        return Merge(arr, low, mid, high);
+    }
 }
 
 void test()
 {
-    double arr[100] = {3,4,1,2,5,7,6,6,2};
+    double arr[100] = {9,10,1,2,5,7,6,61,2};
     int count = 9;
 
     cout<<"Origin    :";
@@ -91,7 +94,7 @@ void test()
         cout<<arr[i]<<' ';
     cout<<endl;
 
-    double *arr0 = QuickSort(arr, 0, count-1);
+    double *arr0 = QuickSort(Value(arr), 0, count-1);
     cout<<"QuickSort :";
     for(int i=0; i<count; ++i)
         cout<<arr0[i]<<' ';
