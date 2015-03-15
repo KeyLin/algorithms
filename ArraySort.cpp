@@ -2,6 +2,7 @@
 
 using namespace std;
 
+//深拷贝传递数组
 double *Value(double a[])
 {
     double *b = new double[100];
@@ -9,7 +10,7 @@ double *Value(double a[])
         b[i] = a[i];
     return b;
 }
-
+//交换数值
 void Swap(double *a, double *b)
 {
     double tmp;
@@ -17,7 +18,7 @@ void Swap(double *a, double *b)
     *a = *b;
     *b = tmp;
 }
-
+//快速排序
 double *QuickSort(double arr[],int low,int high)
 {
     if(low > high) return arr;
@@ -40,7 +41,7 @@ double *QuickSort(double arr[],int low,int high)
     QuickSort(arr , low , k-1);
     QuickSort(arr , k+1 , high);
 }
-
+//冒泡排序
 double *BubbleSort(double arr[], int count)
 {
     for(int i=0; i<count; ++i)
@@ -51,7 +52,7 @@ double *BubbleSort(double arr[], int count)
         }
     return arr;
 }
-
+//归并排序
 double *Merge(double arr[], int low, int mid, int high)
 {
     double *tmp = new double[high-mid];
@@ -71,7 +72,6 @@ double *Merge(double arr[], int low, int mid, int high)
 
     return arr;
 }
-
 double *MergeSort(double arr[],int low, int high)
 {
     if(low >= high) return NULL;
@@ -84,6 +84,7 @@ double *MergeSort(double arr[],int low, int high)
     }
 }
 
+//测试函数
 void test()
 {
     double arr[100] = {9,10,1,2,5,7,6,61,2};
